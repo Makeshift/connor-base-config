@@ -36,6 +36,8 @@ nconf
     .add('base', {
         type: "literal",
         store: {
+            "baseSentryTags": ["package", "version", "useProxy", "logLevel", "region", "environment"], //List of config variables that should be added to the Sentry tags when sending in an error payload
+            "baseSentryExtra": ["stack", "fullStack"], //List of 'extra' fields that should be added to Sentry payloads
             "parentPath": parentPath,
             "package": Object.keys(stackVersions)[stackVersions.length - 1],
             "version": stackVersions[stackVersions.length - 1],
