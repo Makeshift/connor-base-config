@@ -15,7 +15,7 @@ config.add('boilerplate', {
         "useProxy": true, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
         "sentryTags": ["clientName", "projectName"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
         "sentryExtra": ["clientConfig"], //Extra config fields that should be added to the Sentry payload
-        "clientConfig": {}
+        "clientConfig": {},
         "clientName": "Client",
         "projectName": "Project"
     }
