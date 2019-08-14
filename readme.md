@@ -9,6 +9,7 @@ I tend to use this boilerplate package for configuration. It adds a basic config
 ### Boilerplate snippet
 ```
 // This can be copied into new projects as boilerplate for config
+// config.js
 const config = require('connor-base-config');
 
 config.add('boilerplate', {
