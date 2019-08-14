@@ -1,3 +1,15 @@
 {
-	"preset": "eslint"
+   "plugins": {
+     ["@semantic-release/commit-analyzer", {
+       "preset": "eslint"
+     }],
+     "@semantic-release/release-notes-generator",
+     ["@semantic-release/github", {
+       "assets": [
+         "*.js",
+         "*.json"
+       ]
+     }],
+     "@semantic-release/npm"
+   }
 }

@@ -8,6 +8,9 @@
     "parent-package-json": "^2.0.1"
   },
   "devDependencies": {
+    "@semantic-release/github": "^5.4.2",
+    "@semantic-release/npm": "^5.1.13",
+    "@semantic-release/release-notes-generator": "^7.3.0",
     "conventional-changelog-eslint": "^3.0.1",
     "semantic-release": "^15.13.21"
   },
