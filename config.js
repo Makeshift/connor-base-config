@@ -16,7 +16,8 @@ while (parent(__dirname, parentCount) !== false) {
 }
 
 function getRegion() {
-    return process.env["region"] || "us-east-2";
+    //TODO: Look into http://169.254.169.254/latest/meta-data/
+    return process.env["region"] || process.env["AWS_REGION"] || "us-east-2";
 }
 
 function getEnvironment() {
