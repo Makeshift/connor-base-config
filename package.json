@@ -8,6 +8,7 @@
     "parent-package-json": "^2.0.1"
   },
   "devDependencies": {
+    "conventional-changelog-eslint": "^3.0.1",
     "semantic-release": "^15.13.21"
   },
   "repository": {
