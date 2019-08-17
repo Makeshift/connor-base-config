@@ -38,8 +38,8 @@ module.exports = (schema = {}) => {
     config.load({
         metadata: {
             parentPath: parentPath,
-            package: Object.keys(stackVersions)[stackVersions.length - 1] || "connor-base-config",
-            version: stackVersions[stackVersions.length - 1] || "0",
+            package: Object.keys(stackVersions)[stackVersions.length - 1] || myPackage.name,
+            version: stackVersions[stackVersions.length - 1] || myPackage.version,
             stack: stackVersions
         },
         logging: {
