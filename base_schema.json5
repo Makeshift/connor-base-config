@@ -28,8 +28,7 @@
         "metadata.version",
         "proxy.enabled",
         "logging.level",
-        "environment.region",
-        "environment.level"
+        "environment.region"
       ]
     },
     tags: {
