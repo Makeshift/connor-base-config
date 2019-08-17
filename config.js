@@ -5,7 +5,7 @@ const myPackage = require('./package.json');
 require('json5/lib/register');
 const baseSchema = require('./base_schema.json5');
 
-module.exports = (schema) => {
+module.exports = (schema = {}) => {
     let parentCount = 0;
     let stackVersions = {};
     let parentPath = "";
