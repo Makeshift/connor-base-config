@@ -1,10 +1,11 @@
 {
   "name": "connor-base-config",
-  "version": "1.1.1",
+  "version": "2.0.1",
   "description": "Basic configuration boilerplate used by Connor/Makeshift for his packages",
   "main": "config.js",
   "dependencies": {
-    "nconf": "^0.10.0",
+    "convict": "^5.1.0",
+    "json5": "^2.1.0",
     "parent-package-json": "^2.0.1"
   },
   "devDependencies": {
