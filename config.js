@@ -10,9 +10,10 @@ stackVersions[myPackage.name] = myPackage.version;
 
 //Iterate over parent modules to expose version and app info to everyone
 while (parent(__dirname, parentCount) !== false) {
-    let parentPackage = parent(__dirname, parentCount++).parse();
+    let parentPackage = parent(__dirname, parentCount).parse();
     stackVersions[parentPackage.name] = parentPackage.version;
     parentPath = parent(__dirname, parentCount).path;
+    parentCount++;
 }
 
 function getRegion() {
