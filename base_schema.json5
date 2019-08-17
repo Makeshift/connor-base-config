@@ -11,7 +11,7 @@
     enabled: {
       doc: "Should Sentry be enabled?",
       format: "Boolean",
-      default: true,
+      default: false,
       env: "SENTRY_ENABLED"
     },
     dsn: {
