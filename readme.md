@@ -10,32 +10,43 @@ I tend to use this boilerplate package for configuration. It adds a basic config
 ```
 // This can be copied into new projects as boilerplate for config
 // config.js
-const config = require('connor-base-config');
+const schema = {
+    "client": {
+        doc: "Client-specific configuration",
+        format: "Object",
+        default: {},
+        env: "CLIENT_CONFIG"
+    },
+    "custom": {
+        other: {
+            doc: "Other config specific to this application",
+            format: "String",
+            default: "",
+            env: "CUSTOM_OTHER"
+        }
+    }
+}
+
+const config = require('connor-base-config')(schema);
 
 config.load({
-        //Overrides from the base config
-        "sentry.dsn": "", //Make sure you make a new Sentry DSN and add it here
-        "proxy.enabled": true, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
-        "sentry.tags": ["client.name", "client.project"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
-        "sentry.extra": ["client"], //Extra config fields that should be added to the Sentry payload
-        "client": {
-            doc: "Client-specific configuration",
-            format: "Object",
-            default: null,
-            env: "CLIENT_CONFIG"
-        },
-        "logging.level": "verbose",
-        "custom": {
-            other: {
-                doc: "Other config specific to this application",
-                format: "String",
-                default: null,
-                env: "CUSTOM_OTHER"
-            }
-        }
-    });
+    //Overrides from the base config
+    "proxy": {enabled: true}, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
+    "sentry": {
+        dsn: "https://asdf@sentry.ficoccs-prod.net/asfasf", //Make sure you make a new Sentry DSN and add it here
+        tags: ["client.name", "client.project"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
+        extra: ["client"]
+    },
+    "logging": {level: "verbose"},
+    "client": {
+        name: "PLACEHOLDER",
+        project: "PLACEHOLDER"
+    }
+});
 
 config.validate();
+
+//console.log(config.getProperties());
 
 module.exports = config;
 ```

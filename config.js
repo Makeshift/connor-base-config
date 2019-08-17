@@ -2,10 +2,10 @@ const convict = require('convict');
 const tty = require('tty');
 const parent = require('parent-package-json');
 const myPackage = require('./package.json');
-require('json5/lib/register')
+require('json5/lib/register');
 const baseSchema = require('./base_schema.json5');
 
-module.exports = (schema, settings) => {
+module.exports = (schema) => {
     let parentCount = 0;
     let stackVersions = {};
     let parentPath = "";
@@ -33,32 +33,31 @@ module.exports = (schema, settings) => {
 
     let fullSchema = Object.assign(baseSchema, schema);
 
-    let config = convict(fullSchema)
-                .load({...{
-                    metadata: {
-                        parentPath: parentPath,
-                        package: Object.keys(stackVersions)[stackVersions.length - 1] || "connor-base-config",
-                        version: stackVersions[stackVersions.length - 1] || "0",
-                        stack: stackVersions
-                    },
-                    logging: {
-                        colors: getEnvironment() === "develop"
-                    },
-                    environment: {
-                        level: getEnvironment(),
-                        region: getRegion()
-                    }
-                }, ...settings})
-
+    let config = convict(fullSchema);
+    config.load({
+        metadata: {
+            parentPath: parentPath,
+            package: Object.keys(stackVersions)[stackVersions.length - 1] || "connor-base-config",
+            version: stackVersions[stackVersions.length - 1] || "0",
+            stack: stackVersions
+        },
+        logging: {
+            colors: getEnvironment() === "develop"
+        },
+        environment: {
+            level: getEnvironment(),
+            region: getRegion()
+        }
+    });
     const exec = require('child_process').execSync;
     try {
         if (require.main === module) parentPath = __dirname;
         if (config.get("debug.fullstack.enabled")) config.set("debug.fullstack.stack", exec(`npm ls --${getEnvironment()}`, {cwd: parentPath}).toString());
-    } catch(e) {
+    } catch (e) {
         console.log("Failed to get the full package stack - is NPM installed?")
     }
 
     config.validate();
 
     return config;
-}
+};
