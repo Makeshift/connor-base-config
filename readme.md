@@ -7,7 +7,7 @@ I tend to use this boilerplate package for configuration. It adds a basic config
 `npm install connor-base-config`
 
 ### Boilerplate snippet
-```
+```javascript
 // This can be copied into new projects as boilerplate for config
 // config.js
 const schema = {
@@ -25,7 +25,7 @@ const schema = {
             env: "CUSTOM_OTHER"
         }
     }
-}
+};
 
 const config = require('connor-base-config')(schema);
 
@@ -33,7 +33,7 @@ config.load({
     //Overrides from the base config
     "proxy": {enabled: true}, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
     "sentry": {
-        dsn: "https://asdf@sentry.ficoccs-prod.net/asfasf", //Make sure you make a new Sentry DSN and add it here
+        dsn: "https://sentry.makeshift.ninja/", //Make sure you make a new Sentry DSN and add it here
         tags: ["client.name", "client.project"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
         extra: ["client"]
     },

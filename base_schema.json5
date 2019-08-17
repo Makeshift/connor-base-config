@@ -1,129 +1,158 @@
 {
-    sentry: {
-        enabled: {
-            doc: "Should Sentry be enabled?",
-            format: "Boolean",
-            default: true,
-            env: "SENTRY_ENABLED"
-        },
-        dsn: {
-            doc: "What is the DSN we should send Sentry error reports to?",
-            format: "url",
-            default: "https://9e0bf25f123942eab895423780eb9900@sentry.ficoccs-prod.net/18",
-            env: "SENTRY_DSN"
-        },
-        baseTags: {
-            doc: "What tags from this config should we include with our Sentry error reports?",
-            format: "Array",
-            default: ["metadata.package", "metadata.version", "proxy.enabled", "logging.level", "environment.region", "environment.level"]
-        },
-        tags: {
-            doc: "What tags from this config should we include with our Sentry error reports?",
-            format: "Array",
-            default: [],
-            env: "SENTRY_TAGS"
-        },
-        baseExtra: {
-            doc: "What extra fields from this config should we include with our Sentry error reports?",
-            format: "Array",
-            default: [""]
-        },
-        extra: {
-            doc: "What extra fields from this config should we include with our Sentry error reports?",
-            format: "Array",
-            default: [""],
-            env: "SENTRY_EXTRA"
-        },
-        includeConfig: {
-          doc: "Should we include the full application config when sending error reports to Sentry?",
-          format: "Boolean",
-            default: true,
-            env: "SENTRY_INCLUDECONFIG"
-        },
-      debug: {
-        doc: "Should Sentry be in debug mode?",
-        format: "Boolean",
-        default: false,
-        env: "SENTRY_DEBUG"
-      }
+  job: {
+    name: {
+      doc: "What's the name of the task we're doing?",
+      format: "String",
+      default: "None",
+      env: "JOB_NAME"
+    }
+  },
+  sentry: {
+    enabled: {
+      doc: "Should Sentry be enabled?",
+      format: "Boolean",
+      default: true,
+      env: "SENTRY_ENABLED"
     },
-    metadata: {
-        parentPath: {
-            doc: "The top-level package path",
-            format: "String",
-            default: "/"
-        },
-        package: {
-            doc: "The package we're a part of",
-            format: "String",
-            default: "connor-base-config"
-        },
-        version: {
-            doc: "The version of the package we're a part of",
-            format: "String",
-            default: "0.00"
-        },
-        stack: {
-            doc: "The stack of packages working our way up from this config to the top parent",
-            format: "Object",
-            default: {}
-        }
+    dsn: {
+      doc: "What is the DSN we should send Sentry error reports to?",
+      format: "url",
+      default: "https://sentry.makeshift.ninja",
+      env: "SENTRY_DSN"
     },
-    proxy: {
-        enabled: {
-            doc: "Should we use a proxy?",
-            format: "Boolean",
-            default: false,
-            env: "PROXY_ENABLED"
-        },
-        address: {
-            doc: "What is the proxy URL?",
-            format: "url",
-            default: "http://proxy:3128",
-            env: "HTTP_PROXY"
-        }
+    baseTags: {
+      doc: "What tags from this config should we include with our Sentry error reports?",
+      format: "Array",
+      default: [
+        "metadata.package",
+        "metadata.version",
+        "proxy.enabled",
+        "logging.level",
+        "environment.region",
+        "environment.level"
+      ]
     },
-    logging: {
-        level: {
-            doc: "What logging level should we be?",
-            format: ["error", "warn", "info", "verbose", "debug", "silly"],
-            default: "info",
-            env: "LOGGING_LEVEL"
-        },
-        colors: {
-            doc: "Should we have colours in the logs?",
-            format: "Boolean",
-            default: false,
-            env: "LOGGING_COLORS"
-        }
+    tags: {
+      doc: "What tags from this config should we include with our Sentry error reports?",
+      format: "Array",
+      default: [],
+      env: "SENTRY_TAGS"
     },
-    environment: {
-        level: {
-            doc: "What promotion level are we running in?",
-            format: ["development", "production"],
-            default: "production",
-            env: "ENV_LEVEL"
-        },
-        region: {
-            doc: "(AWS) What region are we running in?",
-            format: "String",
-            default: "us-east-1",
-            env: "REGION_OVERRIDE"
-        }
+    baseExtra: {
+      doc: "What extra fields from this config should we include with our Sentry error reports?",
+      format: "Array",
+      default: [
+        ""
+      ]
+    },
+    extra: {
+      doc: "What extra fields from this config should we include with our Sentry error reports?",
+      format: "Array",
+      default: [
+        ""
+      ],
+      env: "SENTRY_EXTRA"
+    },
+    includeConfig: {
+      doc: "Should we include the full application config when sending error reports to Sentry?",
+      format: "Boolean",
+      default: true,
+      env: "SENTRY_INCLUDECONFIG"
     },
     debug: {
-        fullstack: {
-            enabled: {
-                doc: "Should we grab the entire stack? WARNING: Requires NPM and will increase startup lag.",
-                format: "Boolean",
-                default: false,
-                env: "DEBUG_FULLSTACK_ENABLED"
-            },
-            stack: {
-                doc: "Every package in this whole project according to NPM",
-                format: "*",
-                default: null
-            }
-        }
+      doc: "Should Sentry be in debug mode?",
+      format: "Boolean",
+      default: false,
+      env: "SENTRY_DEBUG"
     }
+  },
+  metadata: {
+    parentPath: {
+      doc: "The top-level package path",
+      format: "String",
+      default: "/"
+    },
+    package: {
+      doc: "The package we're a part of",
+      format: "String",
+      default: "connor-base-config"
+    },
+    version: {
+      doc: "The version of the package we're a part of",
+      format: "String",
+      default: "0.00"
+    },
+    stack: {
+      doc: "The stack of packages working our way up from this config to the top parent",
+      format: "Object",
+      default: {}
+    }
+  },
+  proxy: {
+    enabled: {
+      doc: "Should we use a proxy?",
+      format: "Boolean",
+      default: false,
+      env: "PROXY_ENABLED"
+    },
+    address: {
+      doc: "What is the proxy URL?",
+      format: "url",
+      default: "http://proxy:3128",
+      env: "HTTP_PROXY"
+    }
+  },
+  logging: {
+    level: {
+      doc: "What logging level should we be?",
+      format: [
+        "error",
+        "warn",
+        "info",
+        "verbose",
+        "debug",
+        "silly"
+      ],
+      default: "info",
+      env: "LOGGING_LEVEL"
+    },
+    colors: {
+      doc: "Should we have colours in the logs?",
+      format: "Boolean",
+      default: false,
+      env: "LOGGING_COLORS"
+    }
+  },
+  environment: {
+    level: {
+      doc: "What promotion level are we running in?",
+      format: [
+        "development",
+        "production"
+      ],
+      default: "production",
+      env: "ENV_LEVEL"
+    },
+    region: {
+      doc: "(AWS) What region are we running in?",
+      format: "String",
+      default: "us-east-1",
+      env: "REGION_OVERRIDE"
+    }
+  },
+  debug: {
+    fullstack: {
+      enabled: {
+        doc: "Should we grab the entire stack? WARNING: Requires NPM and will increase startup lag.",
+        format: "Boolean",
+        default: false,
+        env: "DEBUG_FULLSTACK_ENABLED"
+      },
+      stack: {
+        doc: "Every package in this whole project according to NPM",
+        format: "*",
+        default: null
+      }
+    }
+  }
 }
