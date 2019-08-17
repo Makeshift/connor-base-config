@@ -12,21 +12,30 @@ I tend to use this boilerplate package for configuration. It adds a basic config
 // config.js
 const config = require('connor-base-config');
 
-config.add('boilerplate', {
-    type: "literal",
-    store: {
-        "sentryDSN": "", //Make sure you make a new Sentry DSN and add it here
-        "useProxy": true, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
-        "sentryTags": ["clientName", "projectName"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
-        "sentryExtra": ["clientConfig"], //Extra config fields that should be added to the Sentry payload
-        "clientConfig": {},
-        "clientName": "Client",
-        "projectName": "Project"
-    }
-}).env({
-    parseValues: true,
-    readOnly: false
-});
+config.load({
+        //Overrides from the base config
+        "sentry.dsn": "", //Make sure you make a new Sentry DSN and add it here
+        "proxy.enabled": true, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
+        "sentry.tags": ["client.name", "client.project"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
+        "sentry.extra": ["client"], //Extra config fields that should be added to the Sentry payload
+        "client": {
+            doc: "Client-specific configuration",
+            format: "Object",
+            default: null,
+            env: "CLIENT_CONFIG"
+        },
+        "logging.level": "verbose",
+        "custom": {
+            other: {
+                doc: "Other config specific to this application",
+                format: "String",
+                default: null,
+                env: "CUSTOM_OTHER"
+            }
+        }
+    });
+
+config.validate();
 
 module.exports = config;
 ```
