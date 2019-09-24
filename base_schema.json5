@@ -116,7 +116,7 @@
       env: "LOGGING_LEVEL"
     },
     colors: {
-      doc: "Should we have colours in the logs?",
+      doc: "Should we have colours when logging to console?",
       format: "Boolean",
       default: false,
       env: "LOGGING_COLORS"
@@ -136,7 +136,7 @@
       doc: "(AWS) What region are we running in?",
       format: "String",
       default: "us-east-1",
-      env: "REGION_OVERRIDE"
+      env: "region"
     }
   },
   debug: {
