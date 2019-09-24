@@ -20,7 +20,7 @@ function createConfigObject(schema) {
     };
 
     conf.addToSchema = (newSchema, validate) => {
-        return conf.updateSchema(Object.assign({}, conf.getSchema(), newSchema), validate)
+        return conf.updateSchema({...conf.getSchema(), ...newSchema}, validate)
     };
 
     return conf;
