@@ -10,8 +10,7 @@ let globalConfigObject;
 
 function createConfigObject(schema) {
     let conf = convict(schema);
-    conf.updateSchema = (schema, validate) => {
-        console.log(schema)
+    conf.updateSchema = (schema, validate = true) => {
         let currentProperties = conf.getProperties();
         let newConfig = createConfigObject(schema);
         newConfig.load(currentProperties);
@@ -23,6 +22,7 @@ function createConfigObject(schema) {
     conf.addToSchema = (newSchema, validate) => {
         return conf.updateSchema(Object.assign({}, conf.getSchema(), newSchema), validate)
     };
+
     return conf;
 }
 
@@ -46,13 +46,13 @@ function getRegion() {
 
 function getEnvironment() {
     //TODO: There are better ways to do this...
-    if (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor") {
+    if (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor" || process.env["NODE_ENV"] === "development") {
         return "development"
     }
     return "production";
 }
 
-globalConfigObject = createConfigObject(baseSchema)
+globalConfigObject = createConfigObject(baseSchema);
 globalConfigObject.load({
     metadata: {
         parentPath: parentPath,
