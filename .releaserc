@@ -10,7 +10,10 @@
          {"type": "Docs", "release": "patch"},
          {"type": "Build", "release": "patch"},
          {"type": "Upgrade", "release": "minor"},
-         {"type": "Chore", "release": "patch"}
+         {"type": "Chore", "release": "patch"},
+         {"type": "Minor", "release": "minor"},
+         {"type": "Major", "release": "major"},
+         {"type": "Patch", "release": "patch"}
        ]
      }],
      ["@semantic-release/release-notes-generator", {
