@@ -10,24 +10,8 @@ I tend to use this boilerplate package for configuration. It adds a basic config
 ```javascript
 // This can be copied into new projects as boilerplate for config
 // config.js
-const schema = {
-    "client": {
-        doc: "Client-specific configuration",
-        format: "Object",
-        default: {},
-        env: "CLIENT_CONFIG"
-    },
-    "custom": {
-        other: {
-            doc: "Other config specific to this application",
-            format: "String",
-            default: "",
-            env: "CUSTOM_OTHER"
-        }
-    }
-};
 
-const config = require('connor-base-config')(schema);
+const config = require('connor-base-config');
 
 config.load({
     //Overrides from the base config
@@ -44,7 +28,24 @@ config.load({
     }
 });
 
-config.validate();
+//Add additional values to the schema
+config.addToSchema({
+   test: {
+     name: {
+      doc: "What's the name of the task we're doing?",
+      format: "String",
+      default: "None",
+      env: "JOB_NAME"
+    }
+   }
+})
+
+//Load additional config to the newly updated schema
+config.load({
+  test: {
+      name: "Testing"
+  }
+})
 
 //console.log(config.getProperties());
 
