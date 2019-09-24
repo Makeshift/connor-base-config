@@ -25,7 +25,6 @@
       format: "Array",
       default: [
         "metadata.package",
-        "metadata.version",
         "proxy.enabled",
         "logging.level",
         "environment.region"
@@ -76,7 +75,7 @@
       format: "String",
       default: "connor-base-config"
     },
-    version: {
+    release: {
       doc: "The version of the package we're a part of",
       format: "String",
       default: "0.00"

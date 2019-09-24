@@ -56,8 +56,8 @@ globalConfigObject = createConfigObject(baseSchema);
 globalConfigObject.load({
     metadata: {
         parentPath: parentPath,
-        package: Object.keys(stackVersions)[stackVersions.length - 1] || myPackage.name,
-        version: stackVersions[stackVersions.length - 1] || myPackage.version,
+        package: Object.keys(stackVersions).pop() || myPackage.name,
+        release: stackVersions[Object.keys(stackVersions).pop()] || myPackage.version,
         stack: stackVersions
     },
     logging: {
