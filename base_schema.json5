@@ -100,7 +100,7 @@
       env: "HTTP_PROXY"
     }
   },
-  logging: {
+  log: {
     level: {
       doc: "What logging level should we be?",
       format: [
@@ -112,13 +112,13 @@
         "silly"
       ],
       default: "info",
-      env: "LOGGING_LEVEL"
+      env: "LOG_LEVEL"
     },
     colors: {
       doc: "Should we have colours when logging to console?",
       format: "Boolean",
       default: false,
-      env: "LOGGING_COLORS"
+      env: "LOG_COLOURS"
     }
   },
   environment: {
