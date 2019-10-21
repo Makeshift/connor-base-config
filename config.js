@@ -5,6 +5,13 @@ const myPackage = require('./package.json');
 require('json5/lib/register');
 const baseSchema = require('./base_schema.json5');
 const exec = require('child_process').execSync;
+convict.addParser({ extension: 'json', parse: require('json5').parse });
+//Fixes booleans from env vars
+convict.addFormat({
+    name: "Boolean",
+    validate: val => typeof val === "boolean",
+    coerce: val => Boolean(val)
+});
 
 let globalConfigObject;
 
