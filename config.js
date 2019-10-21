@@ -60,9 +60,6 @@ globalConfigObject.load({
         release: stackVersions[Object.keys(stackVersions).pop()] || myPackage.version,
         stack: stackVersions
     },
-    logging: {
-        colors: getEnvironment() === "develop"
-    },
     environment: {
         level: getEnvironment(),
         region: getRegion()
