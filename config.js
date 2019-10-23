@@ -10,7 +10,7 @@ convict.addParser({ extension: 'json', parse: require('json5').parse });
 convict.addFormat({
     name: "Boolean",
     validate: val => typeof val === "boolean",
-    coerce: val => Boolean(val)
+    coerce: val => val.toLowerCase() === "true"
 });
 
 let globalConfigObject;
