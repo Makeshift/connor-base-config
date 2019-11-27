@@ -26,7 +26,7 @@ class connorConf extends convict {
         while (parentPackage(__dirname, parentCount) !== false) {
             let currentParentPackage = parentPackage(__dirname, parentCount).parse();
             stackVersions[currentParentPackage.name] = currentParentPackage.version;
-            parentPath = currentParentPackage(__dirname, parentCount).path;
+            parentPath = parentPackage(__dirname, parentCount).path;
             parentCount++
         }
         this.load({
