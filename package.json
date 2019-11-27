@@ -4,7 +4,6 @@
   "description": "Basic configuration boilerplate used by Connor/Makeshift for his packages",
   "main": "config.js",
   "dependencies": {
-    "@types/convict": "^4.2.1",
     "convict": "git+https://github.com/Makeshift/node-convict.git",
     "json5": "^2.1.1",
     "parent-package-json": "^2.0.1"

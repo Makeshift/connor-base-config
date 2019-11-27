@@ -3,6 +3,10 @@
 
 I tend to use this boilerplate package for configuration. It adds a basic config object with some useful data in it, which you can then add to to have a nice global repository store. Designed to work with my [logging boilerplate package](https://github.com/Makeshift/connor-base-log).
 
+This uses a modified version of [convict](https://github.com/mozilla/node-convict) but completely destroys its core principles by making the schema dynamic. I wanted this so I could stack packages on top of each other and add new schemas for each package.
+
+The config is stored as a global symbol. Every time you require `connor-base-config` it will be referencing the same config variable. This means that no matter where you load config in your project, it will be available to every module that requires it.
+
 ### Install
 `npm install connor-base-config`
 
@@ -50,4 +54,9 @@ config.load({
 //console.log(config.getProperties());
 
 module.exports = config;
+```
+
+Or as a one-liner:
+```javascript
+const config = require('connor-base-config').addToSchema(require('./schema.json5'))
 ```

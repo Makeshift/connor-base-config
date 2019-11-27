@@ -1,11 +1,10 @@
 const convict = require('convict');
 const tty = require('tty');
-const parent = require('parent-package-json');
 const myPackage = require('./package.json');
+const parentPackage = require('parent-package-json');
 require('json5/lib/register');
 const baseSchema = require('./base_schema.json5');
-const exec = require('child_process').execSync;
-convict.addParser({ extension: 'json', parse: require('json5').parse });
+convict.addParser({extension: 'json', parse: require('json5').parse});
 //Fixes booleans from env vars
 convict.addFormat({
     name: "Boolean",
@@ -13,74 +12,67 @@ convict.addFormat({
     coerce: val => val.toLowerCase() === "true"
 });
 
-let globalConfigObject;
+const KEY = Symbol.for("connor.base.config");
 
-function createConfigObject(schema) {
-    let conf = convict(schema);
-    conf.updateSchema = (schema, validate = true) => {
-        let currentProperties = conf.getProperties();
-        let newConfig = createConfigObject(schema);
-        newConfig.load(currentProperties);
-        if (validate) newConfig.validate();
-        globalConfigObject = newConfig;
-        return newConfig;
-    };
+class connorConf extends convict {
+    constructor(schema) {
+        super(schema)
+        let parentCount = 0;
+        let stackVersions = {};
+        let parentPath = "";
+        stackVersions[myPackage.name] = myPackage.version;
 
-    conf.addToSchema = (newSchema, validate) => {
-        return conf.updateSchema({...conf.getSchema(), ...newSchema}, validate)
-    };
+        //Iterate over parent modules to expose version and app info to everyone
+        while (parentPackage(__dirname, parentCount) !== false) {
+            let currentParentPackage = parentPackage(__dirname, parentCount).parse();
+            stackVersions[currentParentPackage.name] = currentParentPackage.version;
+            parentPath = currentParentPackage(__dirname, parentCount).path;
+            parentCount++
+        }
+        this.load({
+            metadata: {
+                parentPath: parentPath,
+                package: Object.keys(stackVersions).pop() || myPackage.name,
+                release: stackVersions[Object.keys(stackVersions).pop()] || myPackage.version,
+                stack: stackVersions
+            },
+            //TODO: This is dumb
+            environment: {
+                level: (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor" || process.env["NODE_ENV"] === "development") ? "development" : "production",
+                region: process.env["region"] || process.env["AWS_REGION"] || "us-east-2"
+            }
+        })
 
-    return conf;
-}
+        this.validate();
 
-let parentCount = 0;
-let stackVersions = {};
-let parentPath = "";
-stackVersions[myPackage.name] = myPackage.version;
+        this.updateSchema = (schema, validate=true) => {
+            let currentProperties = global[KEY].getProperties();
+            let newConfig = new connorConf(schema);
+            newConfig.load(currentProperties);
+            if (validate) newConfig.validate();
+            global[KEY] = newConfig;
+            return createSingleton()
+        }
+        this.addToSchema = (newSchema, validate) => {
+            return this.updateSchema({...global[KEY].getSchema(), ...newSchema}, validate)
+        }
 
-//Iterate over parent modules to expose version and app info to everyone
-while (parent(__dirname, parentCount) !== false) {
-    let parentPackage = parent(__dirname, parentCount).parse();
-    stackVersions[parentPackage.name] = parentPackage.version;
-    parentPath = parent(__dirname, parentCount).path;
-    parentCount++
-}
-
-function getRegion() {
-    //TODO: Look into http://169.254.169.254/latest/meta-data/
-    return process.env["region"] || process.env["AWS_REGION"] || "us-east-2";
-}
-
-function getEnvironment() {
-    //TODO: There are better ways to do this...
-    if (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor" || process.env["NODE_ENV"] === "development") {
-        return "development"
+        global[KEY] = this;
     }
-    return "production";
 }
 
-globalConfigObject = createConfigObject(baseSchema);
-globalConfigObject.load({
-    metadata: {
-        parentPath: parentPath,
-        package: Object.keys(stackVersions).pop() || myPackage.name,
-        release: stackVersions[Object.keys(stackVersions).pop()] || myPackage.version,
-        stack: stackVersions
-    },
-    environment: {
-        level: getEnvironment(),
-        region: getRegion()
-    }
-});
-
-try {
-    if (require.main === module) parentPath = __dirname;
-    if (globalConfigObject.get("debug.fullstack.enabled")) globalConfigObject.set("debug.fullstack.stack", exec(`npm ls --${getEnvironment()}`, {cwd: parentPath}).toString());
-} catch (e) {
-    console.log("Failed to get the full package stack - is NPM installed?")
+if (!Object.getOwnPropertySymbols(global).includes(KEY)) {
+    global[KEY] = new connorConf(baseSchema);
 }
 
-globalConfigObject.validate();
+let createSingleton = () => {
+    let singleton = {};
+    Object.keys(global[KEY]).forEach(configKey => {
+        Object.defineProperty(singleton, configKey, {
+            get: () => global[KEY][configKey]
+        })
+    })
+    return singleton
+}
 
-
-module.exports = globalConfigObject;
+module.exports = createSingleton()
