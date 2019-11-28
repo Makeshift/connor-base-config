@@ -23,7 +23,7 @@ class connorConf extends convict {
         stackVersions[myPackage.name] = myPackage.version;
 
         //Iterate over parent modules to expose version and app info to everyone
-        while (parentPackage(__dirname, parentCount) !== false) {
+        while (!parentPackage(__dirname, parentCount)) {
             let currentParentPackage = parentPackage(__dirname, parentCount).parse();
             stackVersions[currentParentPackage.name] = currentParentPackage.version;
             parentPath = parentPackage(__dirname, parentCount).path;
@@ -46,9 +46,8 @@ class connorConf extends convict {
         this.validate();
 
         this.updateSchema = (schema, validate=true) => {
-            let currentProperties = global[KEY].getProperties();
             let newConfig = new connorConf(schema);
-            newConfig.load(currentProperties);
+            newConfig.load(global[KEY].getProperties());
             if (validate) newConfig.validate();
             global[KEY] = newConfig;
             return createSingleton()
