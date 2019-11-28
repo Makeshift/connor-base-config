@@ -38,8 +38,8 @@ class connorConf extends convict {
             },
             //TODO: This is dumb
             environment: {
-                level: (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor" || process.env["NODE_ENV"] === "development") ? "development" : "production",
-                region: process.env["region"] || process.env["AWS_REGION"] || "us-east-2"
+                level: process.env["ENV_LEVEL"] ? process.env["ENV_LEVEL"] : (tty.isatty(process.stdout.fd) || process.env["WebStorm"] || process.env["USERNAME"] === "Connor" || process.env["NODE_ENV"] === "development") ? "development" : "production",
+                region: process.env["region"] || process.env["AWS_REGION"] || process.env["AWS_DEFAULT_REGION"] || "NO_REGION_SET"
             }
         })
 

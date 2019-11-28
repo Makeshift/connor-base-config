@@ -1,49 +1,26 @@
 {
-  job: {
-    name: {
-      doc: "What's the name of the task we're doing?",
-      format: "String",
-      default: "None",
-      env: "JOB_NAME"
-    }
-  },
   metadata: {
     parentPath: {
-      doc: "The top-level package path",
+      doc: "The top-level package path (Automatically generated)",
       format: "String",
       default: "/"
     },
     package: {
-      doc: "The package we're a part of",
+      doc: "The package we're a part of (Automatically generated)",
       format: "String",
       default: "connor-base-config"
     },
     release: {
-      doc: "The version of the package we're a part of",
+      doc: "The version of the package we're a part of (Automatically generated)",
       format: "String",
       default: "0.00"
     },
     stack: {
-      doc: "The stack of packages working our way up from this config to the top parent",
+      doc: "The stack of packages working our way up from this config to the top parent (Automatically generated)",
       format: "Object",
       default: {}
     }
   },
-  proxy: {
-    enabled: {
-      doc: "Should we use a proxy?",
-      format: "Boolean",
-      default: false,
-      env: "PROXY_ENABLED"
-    },
-    address: {
-      doc: "What is the proxy URL?",
-      format: "url",
-      default: "http://proxy:3128",
-      env: "HTTP_PROXY"
-    }
-  },
-
   environment: {
     level: {
       doc: "What promotion level are we running in?",
@@ -55,25 +32,10 @@
       env: "ENV_LEVEL"
     },
     region: {
-      doc: "(AWS) What region are we running in?",
+      doc: "What region or datacentre are we in?",
       format: "String",
-      default: "us-east-1",
+      default: "NO_REGION_SET",
       env: "region"
-    }
-  },
-  debug: {
-    fullstack: {
-      enabled: {
-        doc: "Should we grab the entire stack? WARNING: Requires NPM and will increase startup lag.",
-        format: "Boolean",
-        default: false,
-        env: "DEBUG_FULLSTACK_ENABLED"
-      },
-      stack: {
-        doc: "Every package in this whole project according to NPM",
-        format: "*",
-        default: null
-      }
     }
   }
 }

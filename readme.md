@@ -7,6 +7,15 @@ This uses a modified version of [convict](https://github.com/mozilla/node-convic
 
 The config is stored as a global symbol. Every time you require `connor-base-config` it will be referencing the same config variable. This means that no matter where you load config in your project, it will be available to every module that requires it.
 
+### Features
+* Follows [Convict](https://github.com/mozilla/node-convict)'s schemas and maintains its API - Should be a drop-in replacement for most.
+* JSON5 by default
+* Stackable schema
+* Stored as a globally consistent singleton
+* Can load config from various sources (env vars, arguments, in-line)
+* Optional validation
+* Optionally load config before loading the schema
+
 ### Install
 `npm install connor-base-config`
 
@@ -18,17 +27,9 @@ The config is stored as a global symbol. Every time you require `connor-base-con
 const config = require('connor-base-config');
 
 config.load({
-    //Overrides from the base config
-    "proxy": {enabled: true}, //Defaults to http://proxy:3128, can be overridden with the 'proxy' var in this object
-    "sentry": {
-        dsn: "https://sentry.makeshift.ninja/", //Make sure you make a new Sentry DSN and add it here
-        tags: ["client.name", "client.project"], //Extra list of config variables that should be added to the Sentry tags when sending in an error payload
-        extra: ["client"]
-    },
-    "logging": {level: "verbose"},
-    "client": {
-        name: "PLACEHOLDER",
-        project: "PLACEHOLDER"
+    "environment.level": "production",
+    "metadata.stack": {
+        MyItem: true
     }
 });
 
@@ -52,11 +53,41 @@ config.load({
 })
 
 //console.log(config.getProperties());
+console.log(config.get("test.name"))
 
 module.exports = config;
 ```
 
-Or as a one-liner:
+Or as a shortened example:
 ```javascript
-const config = require('connor-base-config').addToSchema(require('./schema.json5'))
+const config = require('connor-base-config')
+               .addToSchema(require('./job_schema.json5'))
+               .addToSchema(require('./task_schema.json5'))
+               .set("task.name", "My Awesome Task")
 ```
+
+### How should I lay out my config?
+I haven't enforced any particular layout, but my go-to is to essentially use namespaces. Each package that adds its own schema on top gets its own namespace, so you end up with something like this:
+```javascript
+{
+    metadata: {...},
+    task: { //new "namespace"
+        name: "Convert a file",
+        format: "csv",
+        csv: { //new "namespace"
+            delimiter: ",",
+            escapecharacter: "\""
+        }
+    }
+}
+```
+
+### Extra Commands
+For the full list of commands and how schemas work, check [Convict](https://github.com/mozilla/node-convict)'s repo.
+This fork adds the following two functions to the config prototype:
+
+`addToSchema`: Takes a JSON/JSON5 blob and appends it to the current schema, re-applying all config values on top of the new schema. This can also be used to _overwrite_ parts of the old current schema, but that isn't recommended behaviour.
+
+`updateSchema`: Takes a JSON/JSON5 blob and replaces the entire current schema with it, re-applying all config values on top of the new schema.
+
+This fork also modifies Convict's `getSchema` and `getSchemaString` to no longer transform them, so you'll get back exactly what you put in.
