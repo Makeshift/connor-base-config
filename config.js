@@ -11,8 +11,8 @@ convict.addFormat({
     validate: val => typeof val === "boolean",
     coerce: val => val.toLowerCase() === "true"
 });
-
-const KEY = Symbol.for("connor.base.config");
+const KEY_NAME = "connor.base.config"
+const KEY = Symbol.for(KEY_NAME);
 
 class connorConf extends convict {
     constructor(schema) {
@@ -57,10 +57,8 @@ class connorConf extends convict {
             return createSingleton()
         }
         this.addToSchema = (newSchema, validate) => {
-            return this.updateSchema({...global[KEY].getSchema(), ...newSchema}, validate)
+            return this.updateSchema(Object.assign(global[KEY].getSchema(), newSchema), validate)
         }
-
-        global[KEY] = this;
     }
 }
 
@@ -69,7 +67,13 @@ if (!Object.getOwnPropertySymbols(global).includes(KEY)) {
 }
 
 let createSingleton = () => {
-    let singleton = {};
+    let singleton = {
+        //Debugging keys
+        globalKeyName: KEY_NAME,
+        sourceFile: __filename,
+        sourceVersion: myPackage.version,
+
+    };
     Object.keys(global[KEY]).forEach(configKey => {
         Object.defineProperty(singleton, configKey, {
             get: () => global[KEY][configKey]
