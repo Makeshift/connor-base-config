@@ -1,6 +1,6 @@
 {
   "name": "connor-base-config",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Basic configuration boilerplate used by Connor/Makeshift for his packages",
   "main": "config.js",
   "dependencies": {
