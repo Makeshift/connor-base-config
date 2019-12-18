@@ -57,7 +57,7 @@ class connorConf extends convict {
             return createSingleton()
         }
         this.addToSchema = (newSchema, validate) => {
-            return this.updateSchema(Object.assign(global[KEY].getSchema(), newSchema), validate)
+            return this.updateSchema({...global[KEY].getSchema(), ...newSchema}, validate)
         }
     }
 }
