@@ -36,20 +36,6 @@
       format: "String",
       default: "NO_REGION_SET",
       env: "region"
-    },
-    proxy: {
-      enabled: {
-        doc: "Should we use a proxy? (Automatically enabled if the HTTP_PROXY or HTTPS_PROXY env vars are supplied)",
-        format: "Boolean",
-        default: false,
-        env: "PROXY_ENABLED"
-      },
-      address: {
-        doc: "What is the proxy URL?",
-        format: "url",
-        default: "http://proxy:3128",
-        env: "HTTP_PROXY"
-      }
     }
   }
 }
