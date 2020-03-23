@@ -11,6 +11,29 @@ convict.addFormat({
     validate: val => typeof val === "boolean",
     coerce: val => val.toLowerCase() === "true"
 });
+//Allow array children to be validated with a schema properly
+convict.addFormat({
+    name: 'Array',
+    validate: function(sources, schema) {
+        if (!Array.isArray(sources)) {
+            throw new Error('must be of type Array');
+        }
+    },
+    coerce: function(val, instance, key, schema) {
+        //The schema for this array has a schema - Let's load it
+        if (schema.children) {
+            let sanitisedArray = [];
+            for (let item of val) {
+                let coercedKey = convict(schema.children).load(item);
+                coercedKey.validate();
+                sanitisedArray.push(coercedKey.getProperties())
+            }
+            return sanitisedArray;
+        } else {
+            return val;
+        }
+    }
+});
 const KEY_NAME = "connor.base.config"
 const KEY = Symbol.for(KEY_NAME);
 
@@ -29,6 +52,14 @@ class connorConf extends convict {
             parentPath = parentPackage(__dirname, parentCount).path;
             parentCount++
         }
+        this.convictLoad = this.load;
+        this.load = (data, validate=true) => {
+            this.convictLoad(data);
+            if (validate) this.validate();
+        };
+
+        this.originalConstructor = convict;
+
         this.load({
             metadata: {
                 parentPath: parentPath,
@@ -54,6 +85,11 @@ class connorConf extends convict {
         }
         this.addToSchema = (newSchema, validate) => {
             return this.updateSchema({...global[KEY].getSchema(), ...newSchema}, validate)
+        }
+
+        this.addFormat = (format, validate) => {
+            convict.addFormat(format);
+            return this.updateSchema(global[KEY].getSchema(), validate)
         }
     }
 }

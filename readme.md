@@ -15,6 +15,8 @@ The config is stored as a global symbol. Every time you require `connor-base-con
 * Can load config from various sources (env vars, arguments, in-line)
 * Optional validation
 * Optionally load config before loading the schema
+* Proper schema support for arrays
+* Booleans work from env vars now
 
 ### Install
 `npm install connor-base-config`
@@ -82,6 +84,68 @@ I haven't enforced any particular layout, but my go-to is to essentially use nam
 }
 ```
 
+### Array schemas
+You can put schemas in arrays now to make sure every item conforms to the schema:
+
+```javascript
+    config.addToSchema({
+        sources: {
+            doc: 'A collection of data sources.',
+            format: 'Array',
+            default: [],
+            children: {
+                type: {
+                    doc: 'The source type',
+                    format: ['git', 'hg', 'svn'],
+                    default: null
+                },
+                url: {
+                    doc: 'The source URL',
+                    format: 'String',
+                    default: null
+                },
+                test: {
+                    doc: "Test",
+                    default: "Test"
+                }
+            }
+        }
+    });
+
+    config.load({
+        'sources': [
+            {
+                'type': 'git',
+                'url': 'https://github.com/mozilla/node-convict.git'
+            },
+            {
+                'type': 'git',
+                'url': 'https://github.com/github/hub.git'
+            }
+        ]
+    })
+    
+    
+    console.log(config.getProperties())
+    /*
+        Will return:
+          sources: [
+            {
+              type: 'git',
+              url: 'https://github.com/mozilla/node-convict.git',
+              test: 'Test'
+            },
+            {
+              type: 'git',
+              url: 'https://github.com/github/hub.git',
+              test: 'Test'
+            }
+          ]
+    
+     */
+
+```
+
 ### Extra Commands
 For the full list of commands and how schemas work, check [Convict](https://github.com/mozilla/node-convict)'s repo.
 This fork adds the following two functions to the config prototype:
@@ -89,5 +153,7 @@ This fork adds the following two functions to the config prototype:
 `addToSchema`: Takes a JSON/JSON5 blob and appends it to the current schema, re-applying all config values on top of the new schema. This can also be used to _overwrite_ parts of the old current schema, but that isn't recommended behaviour.
 
 `updateSchema`: Takes a JSON/JSON5 blob and replaces the entire current schema with it, re-applying all config values on top of the new schema.
+
+`addFormat`: The same as Convict's one, except it works on an already-initialised config object.
 
 This fork also modifies Convict's `getSchema` and `getSchemaString` to no longer transform them, so you'll get back exactly what you put in.
