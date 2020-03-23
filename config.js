@@ -5,6 +5,7 @@ const parentPackage = require('parent-package-json');
 require('json5/lib/register');
 const baseSchema = require('./base_schema.json5');
 convict.addParser({extension: 'json', parse: require('json5').parse});
+convict.addFormats(require('./validator'));
 //Fixes booleans from env vars
 convict.addFormat({
     name: "Boolean",
