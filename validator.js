@@ -16,7 +16,7 @@ function assert(assertion, err_msg) {
 
 const email = {
   name: 'email',
-  coerce: (v) => v.toString(),
+  coerce: (v) => typeof v !== "string" && v ? v.toString() : v,
   validate: function(x) {
     assert(isEmail(x), 'must be an email address');
   }
@@ -24,7 +24,7 @@ const email = {
 
 const ipaddress = {
   name: 'ipaddress',
-  coerce: (v) => v.toString(),
+  coerce: (v) => typeof v !== "string" && v ? v.toString() : v,
   validate: function(x) {
     assert(isIP(x), 'must be an IP address');
   }
@@ -32,7 +32,7 @@ const ipaddress = {
 
 const url = {
   name: 'url',
-  coerce: (v) => v.toString(),
+  coerce: (v) => typeof v !== "string" && v ? v.toString() : v,
   validate: function(x) {
     assert(isURL(x, {require_tld: false}), 'must be a URL');
   }
