@@ -10,7 +10,12 @@ convict.addFormats(require('./validator'));
 convict.addFormat({
     name: "Boolean",
     validate: val => typeof val === "boolean",
-    coerce: val => val.toLowerCase() === "true"
+    coerce: val => {
+        if (typeof val === "string") {
+            return val.toLowerCase() === "true"
+        }
+        return val;
+    }
 });
 //Allow array children to be validated with a schema properly
 convict.addFormat({
