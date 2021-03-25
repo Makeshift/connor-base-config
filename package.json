@@ -6,6 +6,7 @@
   "dependencies": {
     "@types/convict": "^4.2.1",
     "convict": "https://github.com/Makeshift/node-convict/",
+    "deepmerge": "^4.0.0",
     "json5": "^2.1.2",
     "parent-package-json": "^2.0.1",
     "validator": "^13.0.0"
